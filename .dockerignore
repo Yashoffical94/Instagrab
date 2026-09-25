@@ -1,0 +1,11 @@
+# Keep the build context small for root Dockerfile builds
+node_modules
+server/node_modules
+dist
+.git
+.gitignore
+src
+design
+*.log
+.env
+.env.local
