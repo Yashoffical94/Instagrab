@@ -1,8 +1,0 @@
-[phases.setup]
-nixPkgs = ["yt-dlp"]
-
-[phases.build]
-cmds = ["npm install"]
-
-[phases.run]
-cmd = "node src/server.js"

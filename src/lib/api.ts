@@ -111,6 +111,18 @@ export interface ApiError {
 }
 
 /**
+ * Type guard to check whether an unknown thrown value is an ApiError
+ */
+export function isApiError(value: unknown): value is ApiError {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    'error' in value &&
+    typeof (value as { error: unknown }).error === 'string'
+  )
+}
+
+/**
  * Send a download request to the backend
  * @param url - Instagram URL to process
  * @returns Promise with download response

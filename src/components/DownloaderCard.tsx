@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { ClipboardPaste, Download, Check, AlertCircle, Loader2, Image, Video, User, FileText, ExternalLink } from 'lucide-react'
-import { downloadMedia, checkHealth } from '@/lib/api'
+import { downloadMedia, checkHealth, isApiError } from '@/lib/api'
 import type { DownloadResponse, MediaItem } from '@/lib/api'
 
 export default function DownloaderCard() {
@@ -75,12 +75,12 @@ export default function DownloaderCard() {
       const data = await downloadMedia(url.trim())
       setResult(data)
       setStatus('success')
-    } catch (err: any) {
+    } catch (err: unknown) {
       setStatus('error')
       // Handle structured API errors
-      if (err.error) {
+      if (isApiError(err)) {
         setErrorMessage(err.error)
-      } else if (err.message) {
+      } else if (err instanceof Error && err.message) {
         setErrorMessage(err.message)
       } else {
         setErrorMessage('Something went wrong. Please try again.')

@@ -14,10 +14,6 @@ export default function Navigation() {
     return () => clearTimeout(timer)
   }, [])
 
-  useEffect(() => {
-    setMobileOpen(false)
-  }, [location])
-
   const navLinks = [
     { label: 'Home', href: '/' },
     { label: 'How It Works', href: isHome ? '#features' : '/#features' },
@@ -69,7 +65,7 @@ export default function Navigation() {
         {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
       </button>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu — closes on navigation via link click handlers */}
       {mobileOpen && (
         <div className="absolute top-14 left-0 right-0 bg-black/95 backdrop-blur-xl border-b border-white/10 md:hidden">
           <div className="flex flex-col p-4 gap-2">
@@ -77,7 +73,10 @@ export default function Navigation() {
               <Link
                 key={link.label}
                 to={link.href}
-                onClick={link.href === '#features' ? scrollToFeatures : undefined}
+                onClick={(e) => {
+                  setMobileOpen(false)
+                  if (link.href === '#features') scrollToFeatures(e)
+                }}
                 className="text-sm font-medium text-white/70 hover:text-white py-2 px-3 rounded-lg hover:bg-white/5 transition-all"
               >
                 {link.label}
