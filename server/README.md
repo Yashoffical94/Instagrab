@@ -249,24 +249,39 @@ services:
 
 ### Railway
 
-1. Create a new project on Railway
-2. Connect your GitHub repository
-3. Add a **Node.js** service
-4. Set the root directory or configure the build/start commands
-5. Add environment variables
-6. Deploy
+The backend deploys automatically to Railway on every push to `main`.
+
+**Setup (already configured):**
+
+1. Railway service connected to GitHub repo `Yashoffical94/Instagrab`, branch `main`
+2. **Root directory:** `server` (only the backend is built/deployed)
+3. **Builder:** Dockerfile (`server/Dockerfile` — includes Node 18 + yt-dlp)
+4. **Health check:** `/api/health`
+
+**Environment variables:**
+
+| Variable | Value |
+|----------|-------|
+| `NODE_ENV` | `production` |
+| `CORS_ORIGINS` | `https://instagrab-gray.vercel.app` |
+
+**Manual deploy (fallback):**
+
+```bash
+cd server
+railway up
+```
 
 **railway.json:**
 ```json
 {
   "$schema": "https://railway.app/railway.schema.json",
-  "build": {
-    "builder": "NIXPACKS"
-  },
   "deploy": {
-    "startCommand": "cd server && node src/server.js",
+    "startCommand": "node src/server.js",
     "healthcheckPath": "/api/health",
-    "healthcheckTimeout": 100
+    "healthcheckTimeout": 10,
+    "restartPolicyType": "ON_FAILURE",
+    "restartPolicyMaxRetries": 3
   }
 }
 ```
